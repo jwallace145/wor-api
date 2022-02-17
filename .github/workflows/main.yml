@@ -3,7 +3,7 @@ name: Deploy WOR API to AWS Lambda
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   deploy:

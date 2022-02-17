@@ -2,7 +2,7 @@ name: Format, Lint, Unit Test PRs and Deploy to Dev
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
