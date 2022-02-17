@@ -15,7 +15,7 @@ class EventParser:
 
     def __post_init__(self) -> None:
         self.method = self.event.get("httpMethod")
-        self.path = self.event.get("resourcePath")
+        self.path = self.event.get("path")
 
     def get_method(self) -> str:
         log.info(f"the method of the event: {self.method}")
