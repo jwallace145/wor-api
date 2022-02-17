@@ -9,7 +9,6 @@ log = Logger(__name__).get_logger()
 def lambda_handler(event, context):
 
     log.info(f"lambda event:\n{json.dumps(event, indent=4)}")
-    log.info(f"lambda context:\n{json.dumps(context, indent=4)}")
 
     dynamodb_gateway = DynamoDbGateway()
 
