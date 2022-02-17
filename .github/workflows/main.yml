@@ -1,0 +1,32 @@
+
+name: Deploy WOR API to AWS Lambda
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v2
+
+      - name: Set up Python3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'
+          
+      - name: Zip Source Code
+        run: zip -r wor-api.zip ./ -x 'tests/*';
+
+      - name: Deploy to AWS Lambda
+        uses: appleboy/lambda-action@v0.1.5
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: ${{ secrets.AWS_REGION }}
+          function_name: wor-api
+          zip_file: wor-api.zip

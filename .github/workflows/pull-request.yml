@@ -1,0 +1,73 @@
+name: Format, Lint, Unit Test PRs and Deploy to Dev
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v2
+        
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.8"
+
+      - name: Install Pipenv
+        run: pip install pipenv
+        
+      - name: Format with Black
+        run: |
+          pipenv install --dev
+          pipenv run black .
+        
+      - name: Check Spelling with Codespell
+        run: |
+          pipenv install --dev
+          pipenv run codespell
+        
+      - name: Lint with Flake8
+        run: |
+          pipenv install --dev
+          pipenv run flake8 --count --max-complexity=10 --max-line-length=127 --show-source --statistics --ignore=E501,W503
+        
+      - name: Test with PyTest
+        run: |
+          pipenv install --dev
+          pipenv run pytest tests --cov=src --cov-report xml
+
+      - name: Generate Code Coverage Summary
+        uses: irongut/CodeCoverageSummary@v1.2.0
+        with:
+          filename: coverage.xml
+          badge: true
+          format: markdown
+          hide_branch_rate: false
+          hide_complexity: true
+          indicators: true
+          output: both
+          thresholds: '60 80'
+      
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          recreate: true
+          path: code-coverage-results.md
+
+      - name: Zip Source Code
+        run: zip -r wor-api.zip ./ -x 'tests/*';
+      
+      - name: Deploy to Dev
+        uses: appleboy/lambda-action@v0.1.5
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: ${{ secrets.AWS_REGION }}
+          function_name: wor-api
+          zip_file: wor-api.zip

@@ -1,0 +1,6 @@
+secrets.sh
+logs.log
+.coverage
+build-lambda-layer.sh
+python/
+.pytest_cache

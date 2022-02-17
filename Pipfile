@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+boto3 = "*"
+mypy-boto3-dynamodb = "*"
+coloredlogs = "*"
+
+[dev-packages]
+black = "*"
+pre-commit = "*"
+flake8 = "*"
+codespell = "*"
+pytest = "*"
+pytest-cov = "*"
+moto = "*"
+
+[requires]
+python_version = "3.8"
