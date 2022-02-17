@@ -9,7 +9,7 @@ log = Logger(__name__).get_logger()
 
 def lambda_handler(event, context):
 
-    log.info(f"lambda event:\n{json.dumps(event, indent=4)}")
+    log.info(f"lambda event:\n{json.dumps(event)}")
 
     event_parser = EventParser(event)
 
@@ -20,6 +20,3 @@ def lambda_handler(event, context):
     response = event_handler.handle()
 
     return {"statusCode": 200, "body": json.dumps(response)}
-
-
-lambda_handler(event=None, context=None)
