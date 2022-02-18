@@ -1,6 +1,9 @@
 from dataclasses import dataclass
 from typing import Literal
 from src.handlers.strike_prices_handler import StrikePriceHandler
+from src.utils.logger import Logger
+
+log = Logger(__name__).get_logger()
 
 
 @dataclass
@@ -13,6 +16,6 @@ class EventHandler:
 
     def handle(self) -> None:
         if self.method == "GET" and self.path.startswith("/strike-prices"):
-            return self.strike_prices_handler.get_strike_prices(
-                email=self.query_string_params.get("email")
-            )
+            email = self.query_string_params.get("email", "email not defined")
+            log.info(f"Handling getting strike prices for email {email}.....")
+            return self.strike_prices_handler.get_strike_prices(email=email)
