@@ -8,13 +8,11 @@ class EventHandler:
 
     method: Literal["GET", "POST"]
     path: str
+    query_string_params: dict
     strike_prices_handler: StrikePriceHandler = StrikePriceHandler()
-
-    def get_strike_prices(self, emaiL: str):
-        self.strike_prices_handler.get_all_strike_prices
 
     def handle(self) -> None:
         if self.method == "GET" and self.path.startswith("/strike-prices"):
             return self.strike_prices_handler.get_strike_prices(
-                email="jimmy.wallace145@gmail.com"
+                email=self.query_string_params.get("email")
             )

@@ -14,7 +14,9 @@ def lambda_handler(event, context):
     event_parser = EventParser(event)
 
     event_handler = EventHandler(
-        method=event_parser.get_method(), path=event_parser.get_path()
+        method=event_parser.get_method(),
+        query_string_params=event_parser.get_query_string_params(),
+        path=event_parser.get_path(),
     )
 
     response = event_handler.handle()
